@@ -18,6 +18,10 @@ Currently there are total of 6 mappings:
 
 As a proof of concept app supports displaying line charts for all above data types except blood pressure (this requires additional work as it has 2 measurements while other types have 1)
 
+## Demo
+
+ [A recording of the app in action](demo/demo.gif).
+
 ## Run
 
 1. Install dependencies
