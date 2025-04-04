@@ -20,7 +20,7 @@ As a proof of concept app supports displaying line charts for all above data typ
 
 ## Demo
 
- [A recording of the app in action](demo/demo.gif).
+![A recording of the app in action](demo/demo.gif).
 
 ## Run
 
