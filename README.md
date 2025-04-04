@@ -16,7 +16,7 @@ Currently there are total of 6 mappings:
 
 ## Charts
 
-As a proof of concept app supports displaying graph for all above data types except blood pressure (this requires additional work as it has 2 measurements while other types have 1)
+As a proof of concept app supports displaying line charts for all above data types except blood pressure (this requires additional work as it has 2 measurements while other types have 1)
 
 ## Run
 
