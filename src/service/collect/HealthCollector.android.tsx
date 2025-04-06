@@ -123,43 +123,43 @@ const readBloodPressure = async (
   }));
 };
 
-const readBloodGlucose = async (
+const readBodyTemperature = async (
   startTime: Date,
   endTime: Date
 ): Promise<Observation[]> => {
   await initHealthConnect();
   const grantedPermissions = await requestPermission([
-    { accessType: "read", recordType: "BloodGlucose" },
+    { accessType: "read", recordType: "BodyTemperature" },
   ]);
   if (!grantedPermissions) {
-    throw new Error("Permission to read Blood Glucose data was not granted");
+    throw new Error("Permission to read Body Temperature data was not granted");
   }
-  const { records } = await readRecords("BloodGlucose", {
+  const { records } = await readRecords("BodyTemperature", {
     timeRangeFilter: {
       operator: "between",
       startTime: startTime.toISOString(),
       endTime: endTime.toISOString(),
     },
   });
-  return records.map((record) => ({
+  return records.map((record) => ({ 
     resourceType: "Observation",
     status: "final",
     code: {
       coding: [
         {
           system: "http://loinc.org",
-          code: "15074-8",
-          display: "Blood glucose",
+          code: "8310-5",
+          display: "Body temperature",
         },
       ],
-      text: "Blood glucose",
+      text: "Body temperature",
     },
     effectiveDateTime: record.time,
     valueQuantity: {
-      value: record.level.inMilligramsPerDeciliter,
-      unit: "mg/dL",
+      value: record.temperature.inCelsius,
+      unit: "°C",
       system: "http://unitsofmeasure.org",
-      code: "mg/dL",
+      code: "Cel",
     },
   }));
 };
@@ -221,6 +221,47 @@ const readSteps = async (
     },
   }));
 };
+
+const readDistance = async (
+  startTime: Date,
+  endTime: Date
+): Promise<Observation[]> => {
+  await initHealthConnect();
+  const grantedPermissions = await requestPermission([
+    { accessType: "read", recordType: "Distance" },
+  ]);
+  if (!grantedPermissions) {
+    throw new Error("Permission to read Distance data was not granted");
+  }
+  const { records } = await readRecords("Distance", {
+    timeRangeFilter: {
+      operator: "between",
+      startTime: startTime.toISOString(),
+      endTime: endTime.toISOString(),
+    },
+  });
+  return records.map((record) => ({
+    resourceType: "Observation",
+    status: "final",
+    code: {
+      coding: [
+        {
+          system: "http://loinc.org",
+          code: "8339-4",
+          display: "Distance walked or ran",
+        },
+      ],
+      text: "Distance walked or ran",
+    },
+    effectiveDateTime: record.endTime,
+    valueQuantity: {
+      value: record.distance.inMeters,
+      unit: "m",
+      system: "http://unitsofmeasure.org",
+      code: "m",
+    },
+  }));
+}
 
 const readWeight = async (
   startTime: Date,
@@ -304,6 +345,47 @@ const readHeight = async (
   }));
 }
 
+const readRestingHeartRate = async (
+  startTime: Date,
+  endTime: Date
+): Promise<Observation[]> => {
+  await initHealthConnect();
+  const grantedPermissions = await requestPermission([
+    { accessType: "read", recordType: "RestingHeartRate" },
+  ]);
+  if (!grantedPermissions) {
+    throw new Error("Permission to read Resting Heart Rate data was not granted");
+  }
+  const { records } = await readRecords("RestingHeartRate", {
+    timeRangeFilter: {
+      operator: "between",
+      startTime: startTime.toISOString(),
+      endTime: endTime.toISOString(),
+    },
+  });
+  return records.map((record) => ({
+    resourceType: "Observation",
+    status: "final",
+    code: {
+      coding: [
+        {
+          system: "http://loinc.org",
+          code: "9279-1",
+          display: "Resting heart rate",
+        },
+      ],
+      text: "Resting heart rate",
+    },
+    effectiveDateTime: record.time,
+    valueQuantity: {
+      value: record.beatsPerMinute,
+      unit: "beats/minute",
+      system: "http://unitsofmeasure.org",
+      code: "/min",
+    },
+  }));
+}
+
 const initHealthConnect = async () => {
   const isInitialized = await initialize();
   if (!isInitialized) {
@@ -314,8 +396,10 @@ const initHealthConnect = async () => {
 export default {
   readHeartRate,
   readBloodPressure,
-  readBloodGlucose,
+  readBodyTemperature,
   readSteps,
+  readDistance,
   readWeight,
   readHeight,
+  readRestingHeartRate,
 };

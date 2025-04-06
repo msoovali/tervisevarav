@@ -1,6 +1,6 @@
 import Healthkit, {
-  BloodGlucoseUnit,
   HKQuantityTypeIdentifier,
+  TemperatureUnit,
 } from "@kingstinct/react-native-healthkit";
 import { Observation } from "fhir/r5";
 
@@ -130,23 +130,23 @@ const readBloodPressure = async (
   }));
 };
 
-const readBloodGlucose = async (
+const readBodyTemperature = async (
   startTime: Date,
   endTime: Date
 ): Promise<Observation[]> => {
   await initHealthkit();
   const grantedPermissions = await Healthkit.requestAuthorization([
-    HKQuantityTypeIdentifier.bloodGlucose,
+    HKQuantityTypeIdentifier.bodyTemperature,
   ]);
   if (!grantedPermissions) {
-    throw new Error("Permission to read Blood Glucose data was not granted");
+    throw new Error("Permission to read Body Temperature data was not granted");
   }
   const result = await Healthkit.queryQuantitySamples(
-    HKQuantityTypeIdentifier.bloodGlucose,
+    HKQuantityTypeIdentifier.bodyTemperature,
     {
       from: startTime,
       to: endTime,
-      unit: BloodGlucoseUnit.GlucoseMgPerDl,
+      unit: TemperatureUnit.DegreesCelsius,
     }
   );
   return result.map((sample) => ({
@@ -156,18 +156,18 @@ const readBloodGlucose = async (
       coding: [
         {
           system: "http://loinc.org",
-          code: "15074-8",
-          display: "Blood glucose",
+          code: "8310-5",
+          display: "Body temperature",
         },
       ],
-      text: "Blood glucose",
+      text: "Body temperature",
     },
     effectiveDateTime: sample.endDate.toISOString(),
     valueQuantity: {
       value: sample.quantity,
-      unit: "mg/dL",
+      unit: "Celsius",
       system: "http://unitsofmeasure.org",
-      code: "mg/dL",
+      code: "Cel",
     },
   }));
 };
@@ -225,6 +225,48 @@ const readSteps = async (
     },
   }));
 };
+
+const readDistance = async (
+  startTime: Date,
+  endTime: Date
+): Promise<Observation[]> => {
+  await initHealthkit();
+  const grantedPermissions = await Healthkit.requestAuthorization([
+    HKQuantityTypeIdentifier.distanceWalkingRunning,
+  ]);
+  if (!grantedPermissions) {
+    throw new Error("Permission to read Distance data was not granted");
+  }
+  const result = await Healthkit.queryQuantitySamples(
+    HKQuantityTypeIdentifier.distanceWalkingRunning,
+    {
+      from: startTime,
+      to: endTime,
+      unit: "m",
+    }
+  );
+  return result.map((sample) => ({
+    resourceType: "Observation",
+    status: "final",
+    code: {
+      coding: [
+        {
+          system: "http://loinc.org",
+          code: "59267-5",
+          display: "Distance walked or run",
+        },
+      ],
+      text: "Distance walked or run",
+    },
+    effectiveDateTime: sample.endDate.toISOString(),
+    valueQuantity: {
+      value: sample.quantity,
+      unit: "meters",
+      system: "http://unitsofmeasure.org",
+      code: "m",
+    },
+  }));
+}
 
 const readWeight = async (
   startTime: Date,
@@ -310,6 +352,48 @@ const readHeight = async (
   }));
 }
 
+const readRestingHeartRate = async (
+  startTime: Date,
+  endTime: Date
+): Promise<Observation[]> => {
+  await initHealthkit();
+  const grantedPermissions = await Healthkit.requestAuthorization([
+    HKQuantityTypeIdentifier.restingHeartRate,
+  ]);
+  if (!grantedPermissions) {
+    throw new Error("Permission to read Resting Heart Rate data was not granted");
+  }
+  const result = await Healthkit.queryQuantitySamples(
+    HKQuantityTypeIdentifier.restingHeartRate,
+    {
+      from: startTime,
+      to: endTime,
+      unit: "count/min",
+    }
+  );
+  return result.map((sample) => ({
+    resourceType: "Observation",
+    status: "final",
+    code: {
+      coding: [
+        {
+          system: "http://loinc.org",
+          code: "9279-1",
+          display: "Resting heart rate",
+        },
+      ],
+      text: "Resting heart rate",
+    },
+    effectiveDateTime: sample.endDate.toISOString(),
+    valueQuantity: {
+      value: sample.quantity,
+      unit: "beats/minute",
+      system: "http://unitsofmeasure.org",
+      code: "/min",
+    },
+  }));
+}
+
 const initHealthkit = async () => {
   const isAvailable = await Healthkit.isHealthDataAvailable();
   if (!isAvailable) {
@@ -320,8 +404,10 @@ const initHealthkit = async () => {
 export default {
   readHeartRate,
   readBloodPressure,
-  readBloodGlucose,
+  readBodyTemperature,
   readSteps,
+  readDistance,
   readWeight,
   readHeight,
+  readRestingHeartRate,
 };

@@ -83,11 +83,13 @@ export default function Index() {
 
   const selectableDataTypes = [
     { label: "Kaal", value: "weight" },
+    { label: "Keha temperatuur", value: "bodyTemperature" },
+    { label: "Läbitud vahemaa", value: "distance" },
     { label: "Pikkus", value: "height" },
     { label: "Sammud", value: "steps" },
-    { label: "Südame löögisagedus", value: "heartRate" },
+    { label: "Pulss", value: "heartRate" },
+    { label: "Pulss puhkeseisundis", value: "restingHeartRate" },
     { label: "Vererõhk", value: "bloodPressure" },
-    { label: "Veresuhkur", value: "bloodGlucose" },
   ];
 
   return (
@@ -183,14 +185,24 @@ function getPromiseForDataType(
       return HealthCollector.readHeartRate(range.startDate, range.endDate);
     case "bloodPressure":
       return HealthCollector.readBloodPressure(range.startDate, range.endDate);
-    case "bloodGlucose":
-      return HealthCollector.readBloodGlucose(range.startDate, range.endDate);
+    case "bodyTemperature":
+      return HealthCollector.readBodyTemperature(
+        range.startDate,
+        range.endDate
+      );
+    case "restingHeartRate":
+      return HealthCollector.readRestingHeartRate(
+        range.startDate,
+        range.endDate
+      );
     case "steps":
       return HealthCollector.readSteps(range.startDate, range.endDate);
     case "weight":
       return HealthCollector.readWeight(range.startDate, range.endDate);
     case "height":
       return HealthCollector.readHeight(range.startDate, range.endDate);
+    case "distance":
+      return HealthCollector.readDistance(range.startDate, range.endDate);
     default:
       return Promise.reject(new Error(`Unsupported data type: ${value}`));
   }
