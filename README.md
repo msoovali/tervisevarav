@@ -10,9 +10,11 @@ Currently there are total of 6 mappings:
 - Weight
 - Height
 - Steps
+- Distance
 - Heart rate
+- Resting heart rate
 - Blood pressure
-- Blood clucose
+- Body temperature
 
 ## Charts
 
