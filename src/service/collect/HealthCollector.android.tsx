@@ -28,7 +28,7 @@ const readHeartRate = async (
   return records.flatMap((record) =>
     record.samples.map((sample) => ({
       resourceType: "Observation",
-      status: "final",
+      status: "preliminary",
       code: {
         coding: [
           {
@@ -70,7 +70,7 @@ const readBloodPressure = async (
   });
   return records.map((record) => ({
     resourceType: "Observation",
-    status: "final",
+    status: "preliminary",
     code: {
       coding: [
         {
@@ -143,7 +143,7 @@ const readBodyTemperature = async (
   });
   return records.map((record) => ({ 
     resourceType: "Observation",
-    status: "final",
+    status: "preliminary",
     code: {
       coding: [
         {
@@ -201,7 +201,7 @@ const readSteps = async (
   }));
   return stepsPerDay.map((record) => ({
     resourceType: "Observation",
-    status: "final",
+    status: "preliminary",
     code: {
       coding: [
         {
@@ -242,7 +242,7 @@ const readDistance = async (
   });
   return records.map((record) => ({
     resourceType: "Observation",
-    status: "final",
+    status: "preliminary",
     code: {
       coding: [
         {
@@ -283,7 +283,7 @@ const readWeight = async (
   });
   return records.map((record) => ({
     resourceType: "Observation",
-    status: "final",
+    status: "preliminary",
     code: {
       coding: [
         {
@@ -324,7 +324,7 @@ const readHeight = async (
   });
   return records.map((record) => ({
     resourceType: "Observation",
-    status: "final",
+    status: "preliminary",
     code: {
       coding: [
         {
@@ -365,7 +365,7 @@ const readRestingHeartRate = async (
   });
   return records.map((record) => ({
     resourceType: "Observation",
-    status: "final",
+    status: "preliminary",
     code: {
       coding: [
         {
